@@ -28,6 +28,7 @@ public class main
 
 		ArrayList<Double> num_list = new ArrayList<>();
 		ArrayList<Character> char_list = new ArrayList<>();
+		ArrayList<Integer> first_index_list = new ArrayList<>();
 
 		for (int i = 0; i < str.length();)
 		{
@@ -39,13 +40,14 @@ public class main
 								if (i < str.length())
 										ascii_num = (int)str.charAt(i);
                         }
-                        //System.out.println(num);
+
 			num_list.add(Double.valueOf(num));
 			num="";
 			if (i < str.length() && (ascii_num == 45 || ascii_num == 43 || ascii_num == 42 ||
 			 ascii_num == 47))
 			{
 				char_list.add(Character.valueOf((char)ascii_num));
+				first_index_list.add(Integer.valueOf(num_list.size()-1));
 				i++;
 				ascii_num = (int)str.charAt(i);
 			}
@@ -55,13 +57,18 @@ public class main
 		{
 			if (char_list.get(i) == '*')
 			{
-				//System.out.println(num_list.size());
-				int ind = 2*i + 1 >= num_list.size() ? 2*i-1 : 2*i;
+				int ind = (int)first_index_list.get(i);
+                                /*System.out.println("PRINT BEFORE:");
+                                num_list.stream().forEach(System.out::println);*/
 				res = Double.valueOf(num_list.get(ind)) * Double.valueOf(num_list.get(ind+1));
 							num_list.remove(ind);
 							num_list.remove(ind);
 							num_list.add(ind, res);
 							char_list.remove(i);
+
+				/*System.out.println("INDEX:" + ind);
+				System.out.println("PRINT:");
+				num_list.stream().forEach(System.out::println);*/
 			}
 			else if (char_list.get(i) == '/')
 			{
@@ -82,10 +89,11 @@ public class main
 		{
 			if (char_list.get(i) == '+')
 			{
-				res = Double.valueOf(num_list.get(2*i)) + Double.valueOf(num_list.get(2*i + 1));
-				num_list.remove(2*i);
-				num_list.remove(2*i);
-				num_list.add(2*i, res);
+				int ind = (int)first_index_list.get(i);
+				res = Double.valueOf(num_list.get(ind)) + Double.valueOf(num_list.get(ind + 1));
+				num_list.remove(ind);
+				num_list.remove(ind);
+				num_list.add(ind, res);
 				char_list.remove(i);
 			}
 			else
